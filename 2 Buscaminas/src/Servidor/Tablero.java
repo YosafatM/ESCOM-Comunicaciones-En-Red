@@ -1,5 +1,7 @@
 package Servidor;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ public class Tablero {
     private static char[][] tablero, metatablero;
     private static final int[] ANCHO = {9, 16, 30}, ALTO = {9, 16, 16}, MINAS = {1, 40, 99};
     static final char MINA = 'X';
-    static final char PLACEHOLDER = '?';
+    static final char PLACEHOLDER = '-';
     static final char BANDERA = 'B';
 
     static final List<String> columnasValidas = new ArrayList<>(), filasValidas = new ArrayList<>();
@@ -76,9 +78,15 @@ public class Tablero {
     }
 
     static void mandarTablero(DataOutputStream salida) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream escritor = new DataOutputStream(baos);
+
         for (char[] fila : tablero)
             for (char valor : fila)
-                salida.writeChar(valor);
+                escritor.writeChar(valor);
+
+        escritor.flush();
+        salida.write(baos.toByteArray());
     }
 
     static void actualizarTablero(int fila, int columna) {

@@ -14,7 +14,7 @@ public class Servidor {
     private static long recordFacil, recordIntermedio, recordExperto;
 
     private static boolean hacerMovimiento(DataInputStream entrada, DataOutputStream salida) throws IOException {
-        boolean sonCoordenadasInvalidas = true;
+        boolean sonCoordenadasInvalidas = true, yaPerdio = false;
         String fila = "", columna = "", marca = "";
 
         // Recibir coordenadas
@@ -36,13 +36,13 @@ public class Servidor {
 
         if (Tablero.getMetatablero()[y][x] == Tablero.MINA) {
             resultado = "¡P E R D I S T E! :c";
-            Tablero.getTablero()[y][x] = '☠';
-            return false;
+            Tablero.getTablero()[y][x] = 'X';
+            yaPerdio = true;
         }
 
         Tablero.actualizarTablero(y, x);
         Tablero.mandarTablero(salida);
-        return debeSeguirMoviendo();
+        return !yaPerdio && debeSeguirMoviendo();
     }
 
     private static boolean debeSeguirMoviendo() {

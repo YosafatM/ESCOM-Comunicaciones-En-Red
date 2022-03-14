@@ -1,8 +1,6 @@
 package Cliente;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -11,7 +9,7 @@ public class Cliente {
     private static final int PUERTO = 8000;
     private static final String HOST = "localhost";
     private static final int PRINCIPIANTE = 0, INTERMEDIO = 1, EXPERTO = 2;
-    private static final char MINA = 'X', PLACEHOLDER = '?', BANDERA = 'B';
+    private static final char MINA = 'X', PLACEHOLDER = '-', BANDERA = 'B';
 
     private static char[][] tablero;
 
@@ -78,9 +76,14 @@ public class Cliente {
     }
 
     private static void actualizarTablero(DataInputStream entrada) throws IOException {
+        byte[] mensaje = new byte[2 * tablero.length * tablero[0].length];
+        entrada.readNBytes(mensaje, 0, mensaje.length);
+        ByteArrayInputStream baos = new ByteArrayInputStream(mensaje);
+        DataInputStream lector = new DataInputStream(baos);
+
         for (char[] fila : tablero)
             for (int i = 0; i < fila.length; i++)
-                fila[i] = entrada.readChar();
+                fila[i] = lector.readChar();
     }
 
     public static void main(String[] args) {
