@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Chat {
@@ -59,6 +58,8 @@ public class Chat {
         Scanner scanner = new Scanner(System.in);
         String nombre = scanner.nextLine();
         System.out.println();
+
+        new Interfaz();
 
         while (true) {
             System.out.println("Ingrese el mensaje a enviar:");
