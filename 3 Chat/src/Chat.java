@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Chat {
@@ -7,9 +8,9 @@ public class Chat {
     static final int K_PORT = 10000;
     static final int K_SIZE = 40;
 
-    static void envia_mensaje_multicast(byte[] buffer, String ip, int puerto) throws IOException {
+    static void envia_mensaje_multicast(byte[] buffer) throws IOException {
         DatagramSocket socket = new DatagramSocket();
-        socket.send(new DatagramPacket(buffer, buffer.length, InetAddress.getByName(ip), puerto));
+        socket.send(new DatagramPacket(buffer, buffer.length, InetAddress.getByName(K_IP), K_PORT));
         socket.close();
     }
 
@@ -32,9 +33,11 @@ public class Chat {
 
     static class Worker extends Thread {
         MulticastSocket socket;
+        private Interfaz interfaz;
 
-        Worker() throws IOException {
+        Worker(Interfaz interfaz) throws IOException {
             InetAddress ip_grupo = InetAddress.getByName(K_IP);
+            this.interfaz = interfaz;
             socket = new MulticastSocket(K_PORT);
             socket.joinGroup(ip_grupo);
         }
@@ -43,29 +46,11 @@ public class Chat {
             try {
                 while (true) {
                     byte[] buffer = recibe_mensaje_multicast(socket, K_SIZE);
-
-                    System.out.println(new String(buffer, "UTF-8"));
+                    interfaz.append(new String(buffer, StandardCharsets.UTF_8));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Worker().start();
-        System.out.println("Ingrese su nombre: ");
-        Scanner scanner = new Scanner(System.in);
-        String nombre = scanner.nextLine();
-        System.out.println();
-
-        new Interfaz();
-
-        while (true) {
-            System.out.println("Ingrese el mensaje a enviar:");
-            String linea = scanner.nextLine();
-            String mensaje = format(nombre + ":" + linea);
-            envia_mensaje_multicast(mensaje.getBytes("UTF-8"), K_IP, K_PORT);
         }
     }
 }
