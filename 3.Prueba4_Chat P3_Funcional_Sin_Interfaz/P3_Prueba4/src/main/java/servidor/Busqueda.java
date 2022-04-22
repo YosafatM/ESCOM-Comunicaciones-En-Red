@@ -8,6 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import usuario.DatosUsuario;
@@ -61,7 +62,7 @@ public class Busqueda extends Thread {
                 System.out.println("Destinatario: " + destinatario);
                 
                 //---->ESTE ES EL MENSAJE PRIVADO QUE SE MOSTRARÁ <----
-                msj=o.getNombre()+" dice: "+o.getMensaje(); 
+                msj = o.getMensaje();
                 System.out.println(msj);
 
                 usuarioEncontrado = lu.buscaUsuario(destinatario);  //Se busca el nombre de USUARIO DESTINO, en la "lu" o LISTA DE USUARIOS del lado del SERVIDOR
@@ -70,7 +71,7 @@ public class Busqueda extends Thread {
                 if (usuarioEncontrado != null) {    //Si NO ES NULL, sí existe el Usuario DESTINO
                     System.out.println("El usuario: " + usuarioEncontrado.getNombre() + " destino, se encontró");
                     System.out.println("Enviando a Pto: " + usuarioEncontrado.getPto() + " del datagrama.");
-                    buf = msj.getBytes("UTF-8");   //Se convierte el mensaje a un ARRAY DE BYTES
+                    buf = msj.getBytes(StandardCharsets.UTF_8);   //Se convierte el mensaje a un ARRAY DE BYTES
                     DatagramPacket p2 = new DatagramPacket(buf, buf.length, dst, usuarioEncontrado.getPto());   //Se envía a un MENSAJE PRIVADO al PUERTO DEL SOCKET DE DATAGRAMA CLIENTE, que siempre está ESCUCHANDO
                     DatagramPacket p3= new DatagramPacket(buf, buf.length,dst,usuarioOrigen.getPto());          //Se envía el MENSAJE al propio cliente que ENVIA el MENSAJE PRIVADO, a otro.
                     System.out.println("----->"+usuarioOrigen.getPto()+"<------");  //Se muestra el mensaje en CONSOLA

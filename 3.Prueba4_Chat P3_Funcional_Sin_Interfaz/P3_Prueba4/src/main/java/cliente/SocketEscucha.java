@@ -9,14 +9,17 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SocketEscucha extends Thread {
+    Interfaz interfaz;
 
-    public SocketEscucha(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public SocketEscucha(Interfaz interfaz) {
+        this.nombreUsuario = interfaz.nombre;
+        this.interfaz = interfaz;
     }
 
     public DatagramSocket socketRecibe;
@@ -50,10 +53,6 @@ public class SocketEscucha extends Thread {
             socketRecibe.send(p);   //Se envía el NOMBRE DE USUARIO
             System.out.println("Se ha enviando el nombre " + nombreUsuario + " al servidor.");
             System.out.println(socketRecibe.getLocalPort());
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex) {
-            Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,12 +68,6 @@ public class SocketEscucha extends Thread {
             DatagramPacket p= new DatagramPacket(buf, buf.length, dst, 1234);
             socketEnvia.send(p);
             
-        } catch (SocketException ex) {
-            Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(SocketEscucha.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,15 +79,13 @@ public class SocketEscucha extends Thread {
         Scanner s = new Scanner(System.in);
         try {
 
-            while (true) {  //Ciclo infinito 
-                System.out.println("Esperando mensaje privado...");
+            while (true) {  //Ciclo infinito
                 
                 //El "SocketRecibe" siempre estará esperando un mensaje y ya se mandaraon los DATOS de este mismo socket AL SERVIDOR 
                 byte[] buffer = recibe_mensaje_multicast2(socketRecibe, longuitudMsj);   //Se recibe el mensaje PRIVADO 
-                //Este es el mensaje transmitido al SOCKET MULTICAST
-                System.out.println("\n\n----------------------");
-                System.out.println(new String(buffer, "UTF-8"));    //Se IMPRIME la info del BUFFER que es una cadena y se imprime en UTF-8
-                System.out.println("----------------------\n\n");
+                String msj = new String(buffer, StandardCharsets.UTF_8);
+                interfaz.append(msj);
+                System.out.println(msj);
             }
         } catch (IOException e) {
             e.printStackTrace();
