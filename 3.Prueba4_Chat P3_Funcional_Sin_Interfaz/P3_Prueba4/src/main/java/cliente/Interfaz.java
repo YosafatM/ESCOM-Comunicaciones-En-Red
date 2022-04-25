@@ -17,13 +17,13 @@ public class Interfaz {
 
     int bearCodepoint = bear.codePointAt(bear.offsetByCodePoints(0, 0));
     int mysteryAnimalCodepoint = bearCodepoint + 1;
-    char mysteryAnimal[] = {Character.highSurrogate(mysteryAnimalCodepoint),
+    char[] mysteryAnimal = {Character.highSurrogate(mysteryAnimalCodepoint),
             Character.lowSurrogate(mysteryAnimalCodepoint)};
 
     public Interfaz() {
         ventana = new JFrame("Chat");
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ventana.setSize(400,300);
+        ventana.setSize(400,500);
         ventana.setLayout(null);
         ventana.setResizable(false);
 
@@ -38,22 +38,20 @@ public class Interfaz {
         textoDestinatario.setBounds(260,10,100,30);
 
         area = new JTextArea();
-        area.setBounds(10,50,360,100);
+        area.setBounds(10,50,360,300);
         area.setEditable(false);
-        area.setLineWrap(true);
-        area.setWrapStyleWord(true);
 
         labelMensaje = new JLabel("Mensaje");
-        labelMensaje.setBounds(10,150,100,30);
+        labelMensaje.setBounds(10,350,100,30);
 
         textoMensaje = new JTextField();
-        textoMensaje.setBounds(10,173,360,30);
+        textoMensaje.setBounds(10,373,360,30);
 
         boton = new JButton("Enviar");
-        boton.setBounds(270,210,100,30);
+        boton.setBounds(270,410,100,30);
 
         emoji = new JButton(new String(mysteryAnimal));
-        emoji.setBounds(10,210,60,30);
+        emoji.setBounds(10,410,60,30);
 
         ventana.add(textoMensaje);
         ventana.add(labelMensaje);
@@ -87,9 +85,7 @@ public class Interfaz {
             }
         });
 
-        emoji.addActionListener(e -> {
-            textoMensaje.setText(textoMensaje.getText() + String.valueOf(mysteryAnimal));
-        });
+        emoji.addActionListener(e -> textoMensaje.setText(textoMensaje.getText() + String.valueOf(mysteryAnimal)));
     }
 
     void append(String texto) {
