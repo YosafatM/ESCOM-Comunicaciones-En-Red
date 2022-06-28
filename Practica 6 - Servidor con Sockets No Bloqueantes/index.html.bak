@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html;" />
+		<title>Servidor Web</title>
+
+		<style>
+            .column {
+                float: left;
+                width: 50%;
+            }
+
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+		</style>
+	</head>
+	
+	<body style="background-color:rosybrown">
+
+		<div class="row">
+			<div class="column">
+				<h2>GET Request</h2>
+				<form action="get" method="GET" name="formGET">
+					Name: <br>
+					<input type="text" name="Nombre"><br>
+
+					Address: <br>
+					<input type="text" name="Direccion"><br>
+
+					Telephone: <br>
+					<input type="text" name="Telefono"><br>
+
+					Comments:<br>
+					<textarea name="Comentarios" rows="7" cols="40"></textarea>
+					<br>
+
+					<input type="submit" value="Send">
+					<input type="reset" value="Erase">
+				</form>
+			</div>
+
+
+			<div class="column">
+				<h2>POST Request</h2>
+				<form action="post" method="POST" name="formPost">
+					Name: <br>
+					<input type="text" name="Nombre"><br>
+
+					Address: <br>
+					<input type="text" name="Direccion"><br>
+
+					Telephone: <br>
+					<input type="text" name="Telefono"><br>
+
+					Comments:<br>
+					<textarea name="Comentarios" rows="7" cols="40"></textarea>
+					<br>
+
+					<input type="submit" value="Send">
+					<input type="reset" value="Erase">
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
